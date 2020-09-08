@@ -12,7 +12,7 @@ const { isAtuthenticated, isRecipeOwner } = require('./middleware')
 
 module.exports = {
     Query: {
-        getRecipes:  combineResolvers( isAtuthenticated, async () => {
+        getRecipes: combineResolvers( isAtuthenticated, async () => {
             try {
                 const recipes = await Recipe.find()
                 return recipes
@@ -52,6 +52,26 @@ module.exports = {
                 await user.save();
                 await category.save();
                 
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }),
+        updateRecipe: combineResolvers( isAtuthenticated, isRecipeOwner, async(_,{ id, input } ) => {
+            try {
+                const recipe = await Recipe.findByIdAndUpdate(id, {...input}, {new: true})
+                return recipe;
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }),
+        deleteRecipe: combineResolvers( isAtuthenticated, isRecipeOwner, async(_, { id }, { loggedInUserId }) => {
+            try {
+                const recipe = await Recipe.findByIdAndDelete(id);
+                await User.updateOne({ _id: loggedInUserId }, { $pull: { recipes: recipe.id } })
+                await Category.updateOne({_id: loggedInUserId },{$pull: { recipes: recipe.id}})
+                return recipe;
             } catch (error) {
                 console.log(error);
                 throw error;

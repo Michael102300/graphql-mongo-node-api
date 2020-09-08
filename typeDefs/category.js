@@ -6,8 +6,9 @@ module.exports = gql `
         getOneCategory(name: String!): Category
     }
     extend type Mutation{
-        createCategory(input: createCategoryInput): Category!
-        updateCategory(input: updateCategoryInput): Category
+        createCategory(input: createCategoryInput!): Category
+        updateCategory(id: ID!, input: updateCategoryInput!): Category
+        deleteCategory(id: ID!): Category
     }
     input createCategoryInput{
         name: String!

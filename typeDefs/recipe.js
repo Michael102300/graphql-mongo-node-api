@@ -8,15 +8,15 @@ module.exports = gql `
         getMyRecipes: [Recipe!]
     }
     extend type Mutation {
-        createRecipe(input: createRecipeInput): Recipe
-        updateRecipe(input: updateRecipeInput): Recipe
+        createRecipe(input: createRecipeInput!): Recipe
+        updateRecipe(id: ID! ,input: updateRecipeInput!): Recipe
+        deleteRecipe(id: ID!): Recipe
     }
     input updateRecipeInput {
         name: String
         description: String
         ingredients: String
         categoryName: String
-        userId: String
     }
     input createRecipeInput {
         name: String!

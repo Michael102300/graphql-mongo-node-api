@@ -1,6 +1,8 @@
 const { skip } = require('graphql-resolvers');
 const Recipe = require('../../database/models/recipe');
 const { isValidObjectId } = require('../../database/util');
+
+
 module.exports.isAtuthenticated = (_,__, { email })  => {
     if(!email){
         throw new Error('Access Denied!')
@@ -25,3 +27,4 @@ module.exports.isRecipeOwner = async (_, { id }, { loggedInUserId }) => {
         throw error;
     }
 }
+

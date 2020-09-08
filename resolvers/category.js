@@ -16,7 +16,7 @@ module.exports = {
             }
             
         }),
-        getOneCategory: combineResolvers( isAtuthenticated, async (_, { name }) => {
+        getOneCategory:combineResolvers( isAtuthenticated, async (_, { name }) => {
             try {
                 const category = await Category.findOne({name: name})
                 return category;
@@ -37,6 +37,15 @@ module.exports = {
                 const result = await newCategory.save();
                 return result;
                 
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }),
+        updateCategory: combineResolvers( isAtuthenticated, async(_, { id, input }) => {
+            try {
+                const category = await Category.findByIdAndUpdate(id, {...input}, {new: true})
+                return category;
             } catch (error) {
                 console.log(error);
                 throw error;
